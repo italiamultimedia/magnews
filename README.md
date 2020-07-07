@@ -7,7 +7,7 @@ Magnews integration
 ## Setup
 
 ```sh
-composer update
+composer install
 ```
 
 ---
