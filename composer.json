@@ -1,0 +1,38 @@
+{
+    "name" : "italiamultimedia/magnews",
+    "type" : "library",
+    "description" : "Magnews integration",
+    "keywords" : [
+        "italiamultimedia",
+        "magnews"
+    ],
+    "homepage" : "https://projects.italiamultimedia.com/italiamultimedia/magnews",
+    "license" : "MIT",
+    "authors" : [
+        {
+            "name" : "Radu Maier",
+            "email" : "ariademur@webserv.co"
+        }
+    ],
+    "require" : {
+        "php" : "^7.3"
+    },
+    "require-dev" : {
+    },
+    "suggest" : {
+        "pds/skeleton" : "A standard filesystem skeleton suitable for all PHP packages.",
+        "squizlabs/php_codesniffer" : "Detects violations of a defined set of coding standards.",
+        "phpstan/phpstan" : "PHP Static Analysis Tool, when using PHP 7.x"
+    },
+    "autoload" : {
+        "psr-4" : {
+            "Project\\" : "src/"
+        }
+    },
+    "scripts" : {
+        "check:structure" : "pds-skeleton validate .",
+        "check" : "phpcs --standard=PSR2 --extensions=php config public src tests",
+        "s:5": "phpstan analyse src tests --level=5 --ansi -c phpstan.neon",
+        "all": "clear && composer s:5 && composer check"
+    }
+}
