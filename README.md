@@ -4,9 +4,25 @@ Magnews integration
 
 ---
 
+## Setup
+
+```sh
+composer update
+```
+
+---
+
 ## Examples
 
-### Subscribe
-`public/example-contacts-subscribe.php`
+### Contacts - Subscribe
+
+Edit: `$accessToken`, `$idDatabase`
+
+Run:
+```sh
+php public/example-contacts-subscribe.php
+```
+
+
 
 ---
