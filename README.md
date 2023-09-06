@@ -23,6 +23,8 @@ Run:
 php public/example-contacts-subscribe.php
 ```
 
-
-
 ---
+
+## TODO
+
+- fix static analysis issues (phpmd, psalm)
