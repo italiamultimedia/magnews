@@ -1,38 +1,58 @@
 {
-    "name" : "italiamultimedia/magnews",
-    "type" : "library",
-    "description" : "Magnews integration",
-    "keywords" : [
-        "italiamultimedia",
-        "magnews"
-    ],
-    "homepage" : "https://projects.italiamultimedia.com/italiamultimedia/magnews",
-    "license" : "MIT",
     "authors" : [
         {
             "name" : "Radu Maier",
             "email" : "ariademur@webserv.co"
         }
     ],
-    "require" : {
-        "php" : "^7.3"
-    },
-    "require-dev" : {
-    },
-    "suggest" : {
-        "pds/skeleton" : "A standard filesystem skeleton suitable for all PHP packages.",
-        "squizlabs/php_codesniffer" : "Detects violations of a defined set of coding standards.",
-        "phpstan/phpstan" : "PHP Static Analysis Tool, when using PHP 7.x"
-    },
     "autoload" : {
         "psr-4" : {
-            "Project\\" : "src/"
+            "ItaliaMultimedia\\" : "src/ItaliaMultimedia/"
         }
     },
-    "scripts" : {
-        "check:structure" : "pds-skeleton validate .",
-        "check" : "phpcs --standard=PSR2 --extensions=php config public src tests",
-        "s:5": "phpstan analyse src tests --level=5 --ansi -c phpstan.neon",
-        "all": "clear && composer s:5 && composer check"
-    }
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
+    },
+    "description" : "Magnews integration",
+    "homepage" : "https://projects.italiamultimedia.com/italiamultimedia/magnews",
+    "keywords" : [
+        "italiamultimedia",
+        "magnews"
+    ],
+    "license" : "MIT",
+    "name" : "italiamultimedia/magnews",
+    "require" : {
+        "php" : "^8.2"
+    },
+    "require-dev": {
+        "pds/skeleton": "^1",
+        "phan/phan": "^5",
+        "php-parallel-lint/php-parallel-lint": "^1",
+        "php-parallel-lint/php-console-highlighter": "^1",
+        "phpcompatibility/php-compatibility": "^9",
+        "phpmd/phpmd": "^2",
+        "phpstan/phpstan-strict-rules": "^1",
+        "phpstan/phpstan-phpunit": "^1",
+        "phpstan/phpstan" : "^1",
+        "phpunit/phpunit": "^10",
+        "slevomat/coding-standard": "^8",
+        "squizlabs/php_codesniffer" : "^3",
+        "vimeo/psalm": "^5",
+        "webservco/coding-standards": "^0"
+    },
+    "scripts": {
+        "check:lint": "vendor/bin/parallel-lint bin config public resources src tests",
+        "check:phan": "vendor/bin/phan --config-file vendor/webservco/coding-standards/phan/config.php",
+        "check:phpcs": "vendor/bin/phpcs --standard=.phpcs/php-coding-standard.xml --extensions=php -sp bin config public resources src tests",
+        "check:phpmd": "vendor/bin/phpmd bin,config,public,resources,src,tests json vendor/webservco/coding-standards/phpmd/phpmd-rule-set.xml",
+        "check:phpstan": "vendor/bin/phpstan analyse bin config public resources src tests --ansi -c vendor/webservco/coding-standards/phpstan/phpstan.neon --level=max",
+        "check:psalm": "vendor/bin/psalm --config=vendor/webservco/coding-standards/psalm/psalm.xml --no-diff",
+        "check:skeleton": "vendor/bin/pds-skeleton validate .",
+        "fix:phpcs": "vendor/bin/phpcbf --standard=.phpcs/php-coding-standard.xml --extensions=php -sp bin config public resources src tests",
+        "test" : "vendor/bin/phpunit --colors=always --configuration vendor/webservco/coding-standards/phpunit/phpunit-10.xml --display-deprecations --display-errors --display-incomplete --display-notices --display-skipped --display-warnings",
+        "test:dox" : "@test --testdox"
+    },
+    "type" : "library"
 }
