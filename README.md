@@ -4,6 +4,13 @@ Magnews integration
 
 ---
 
+## Notes
+
+* `v0`: PHP 7
+* `v1`: PHP 8
+
+---
+
 ## Setup
 
 ```sh
