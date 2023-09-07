@@ -25,6 +25,6 @@ final class MagNewsContacts extends AbstractMagNews
 
         $this->log[] = __METHOD__ . ' ' . print_r($data, true);
 
-        return array_key_exists('ok', $data);
+        return array_key_exists('ok', $data) && $data['ok'] === true;
     }
 }
