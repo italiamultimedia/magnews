@@ -47,6 +47,17 @@ abstract class AbstractMagNews
 {
     private const API_URL = 'https://ws-mn1.mag-news.it/ws/rest/api/v19';
 
+    private const RESPONSE_FIELDS = [
+        'ok',
+        'pk',
+        'idcontact',
+        'action',
+        'errors',
+        'sendemail',
+        'enterworkflow',
+        'idwebtracking',
+    ];
+
     /**
      * @phpcs:disable SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint.DisallowedMixedTypeHint
      * @var array<int,mixed> $log
@@ -215,9 +226,17 @@ abstract class AbstractMagNews
      */
     private function hydrateResponse(array $data): MagNewsResponse
     {
-        foreach (['ok', 'pk', 'idcontact', 'action', 'errors', 'sendemail', '$enterworkflow'] as $field) {
+        foreach (self::RESPONSE_FIELDS as $field) {
             if (!array_key_exists($field, $data)) {
-                throw new OutOfBoundsException('Missing required field.');
+                /**
+                 * Sometimes magnews returns a response in a different format.
+                 * Eg. {"error":"Internal Server Error"}
+                 */
+                if (array_key_exists('error', $data)) {
+                    throw new UnexpectedValueException(sprintf('MagNews error: "%s".', $data['error']));
+                }
+
+                throw new OutOfBoundsException(sprintf('Response is missing required field "%s".', $field));
             }
         }
 
