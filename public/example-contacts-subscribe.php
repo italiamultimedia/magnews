@@ -7,10 +7,10 @@ use ItaliaMultimedia\MagNews\MagNewsContacts;
 $projectPath = realpath(__DIR__ . '/..') . DIRECTORY_SEPARATOR;
 require $projectPath . 'vendor/autoload.php';
 
-// edit
+/** Edit start */
 $accessToken = '';
-// edit
 $idDatabase = '';
+/** Edit stop */
 
 try {
     $magNewsContacts = new MagNewsContacts($accessToken);
@@ -27,5 +27,7 @@ try {
     $log = [$e->getMessage()];
 }
 
+echo '<pre>';
 var_dump($result);
 print_r($log);
+echo '</pre>';
