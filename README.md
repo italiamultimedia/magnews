@@ -14,7 +14,7 @@ Magnews integration
 ## Setup
 
 ```sh
-composer install
+composer require {PACKAGE}
 ```
 
 ---
@@ -34,4 +34,4 @@ php public/example-contacts-subscribe.php
 
 ## TODO
 
-- fix static analysis issues (phpmd, psalm)
+- fix static analysis issues (lint+phpcs+phpstan must always work)
