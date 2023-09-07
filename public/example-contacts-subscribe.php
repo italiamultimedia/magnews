@@ -12,6 +12,7 @@ $accessToken = '';
 $idDatabase = '';
 /** Edit stop */
 
+
 try {
     $magNewsContacts = new MagNewsContacts($accessToken);
     $mag_data = [
@@ -20,14 +21,13 @@ try {
         'NAME' => 'Pinco',
         'SURNAME' => 'Pallo',
     ];
-    $result = $magNewsContacts->subscribe($mag_data, $idDatabase);
+    $response = $magNewsContacts->subscribe($mag_data, $idDatabase);
     $log = $magNewsContacts->getLog();
+    var_dump($response->ok);
 } catch (Throwable $e) {
-    $result = false;
     $log = [$e->getMessage()];
 }
 
 echo '<pre>';
-var_dump($result);
 print_r($log);
 echo '</pre>';

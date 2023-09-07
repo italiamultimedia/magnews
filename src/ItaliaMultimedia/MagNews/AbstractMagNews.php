@@ -5,8 +5,11 @@ declare(strict_types=1);
 namespace ItaliaMultimedia\MagNews;
 
 use CurlHandle;
+use ItaliaMultimedia\MagNews\DataTransfer\MagNewsResponse;
+use OutOfBoundsException;
 use UnexpectedValueException;
 
+use function array_key_exists;
 use function curl_close;
 use function curl_errno;
 use function curl_error;
@@ -19,6 +22,8 @@ use function explode;
 use function fclose;
 use function fopen;
 use function is_array;
+use function is_bool;
+use function is_int;
 use function is_resource;
 use function is_string;
 use function json_decode;
@@ -71,9 +76,8 @@ abstract class AbstractMagNews
      * @phpcs:disable SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint.DisallowedMixedTypeHint
      * @param array<string,array<string,string>|string> $postData
      * @phpcs: enable
-     * @return array<mixed>
      */
-    protected function getApiData(string $resource, bool $isPost, array $postData): array
+    protected function getApiData(string $resource, bool $isPost, array $postData): MagNewsResponse
     {
         /*
         $time = [
@@ -97,10 +101,10 @@ abstract class AbstractMagNews
         //$time['end'] = microtime(true);
 
         if (!is_array($data)) {
-            return [];
+            throw new UnexpectedValueException('Data is not an array.');
         }
 
-        return $data;
+        return $this->hydrateResponse($data);
     }
 
     /**
@@ -198,6 +202,54 @@ abstract class AbstractMagNews
         }
 
         return $body;
+    }
+    // @phpcs:enable
+
+    /**
+     * @phpcs:disable SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
+     * @phpcs:disable SlevomatCodingStandard.Functions.FunctionLength.FunctionLength
+     * @phpcs:disable SlevomatCodingStandard.Files.FunctionLength.FunctionLength
+     * @phpcs:disable SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint.DisallowedMixedTypeHint
+     * @param array<mixed> $data
+     * @todo solve phpcs issues
+     */
+    private function hydrateResponse(array $data): MagNewsResponse
+    {
+        foreach (['ok', 'pk', 'idcontact', 'action', 'errors', 'sendemail', '$enterworkflow'] as $field) {
+            if (!array_key_exists($field, $data)) {
+                throw new OutOfBoundsException('Missing required field.');
+            }
+        }
+
+        if (!is_bool($data['ok'])) {
+            throw new UnexpectedValueException('Value is not of the expected type.');
+        }
+
+        foreach (['pk', 'action'] as $field) {
+            if (!is_string($data[$field])) {
+                throw new UnexpectedValueException('Value is not of the expected type.');
+            }
+        }
+
+        if (!is_int($data['idcontact'])) {
+            throw new UnexpectedValueException('Value is not of the expected type.');
+        }
+
+        return new MagNewsResponse(
+            $data['ok'],
+            $data['pk'],
+            $data['idcontact'],
+            $data['action'],
+            is_array($data['errors'])
+                ? $data['errors']
+                : null,
+            is_array($data['sendemail'])
+                ? $data['sendemail']
+                : null,
+            is_array($data['enterworkflow'])
+                ? $data['enterworkflow']
+                : null,
+        );
     }
     // @phpcs:enable
 }

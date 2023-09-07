@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace ItaliaMultimedia\MagNews;
 
-use function array_key_exists;
+use ItaliaMultimedia\MagNews\DataTransfer\MagNewsResponse;
+
 use function print_r;
 
 final class MagNewsContacts extends AbstractMagNews
@@ -12,7 +13,7 @@ final class MagNewsContacts extends AbstractMagNews
     /**
      * @param array<string,string> $userData
      */
-    public function subscribe(array $userData, string $idDatabase): bool
+    public function subscribe(array $userData, string $idDatabase): MagNewsResponse
     {
         $postData = [
             'options' => ['iddatabase' => $idDatabase],
@@ -25,6 +26,6 @@ final class MagNewsContacts extends AbstractMagNews
 
         $this->log[] = __METHOD__ . ' ' . print_r($data, true);
 
-        return array_key_exists('ok', $data) && $data['ok'] === true;
+        return $data;
     }
 }
