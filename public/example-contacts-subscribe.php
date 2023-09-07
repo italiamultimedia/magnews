@@ -12,7 +12,6 @@ $accessToken = '';
 $idDatabase = '';
 /** Edit stop */
 
-
 try {
     $magNewsContacts = new MagNewsContacts($accessToken);
     $mag_data = [
