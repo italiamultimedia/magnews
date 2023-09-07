@@ -12,21 +12,40 @@ $accessToken = '';
 $idDatabase = '';
 /** Edit stop */
 
+// Initialize.
+$magNewsContacts = new MagNewsContacts($accessToken);
+
+$response = null;
 try {
-    $magNewsContacts = new MagNewsContacts($accessToken);
+    /**
+     * Request data.
+     * @phpcs:disable SlevomatCodingStandard.Arrays.AlphabeticallySortedByKeys.IncorrectKeyOrder
+     */
     $mag_data = [
         'EMAIL' => 'magnews@webserv.co',
         'LINGUA' => 'ITA',
-        'NAME' => 'Pinco',
-        'SURNAME' => 'Pallo',
+        'NOME' => 'Pinco',
+        'COGNOME' => 'Pallo',
     ];
+    // @phpcs:enable
+
+    /**
+     * Get response
+     * [MagNewsResponse](https://github.com/italiamultimedia/magnews/blob/main/src/ItaliaMultimedia/MagNews/DataTransfer/MagNewsResponse.php)
+     *
+     * Check $response->ok for result
+     */
     $response = $magNewsContacts->subscribe($mag_data, $idDatabase);
-    $log = $magNewsContacts->getLog();
-    var_dump($response->ok);
 } catch (Throwable $e) {
-    $log = [$e->getMessage()];
+    echo $e->getMessage();
 }
 
+// Debug
 echo '<pre>';
-print_r($log);
+echo 'Response:';
+var_dump($response);
+echo '<hr>';
+echo 'Log:';
+var_dump($magNewsContacts->getLog());
 echo '</pre>';
+exit;
